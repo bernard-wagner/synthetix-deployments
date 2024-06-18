@@ -12,6 +12,7 @@ include = [
     # "tomls/collaterals/weth.toml",
     "tomls/pools/spartan-council.toml",
     "tomls/permit-all-transferCrossChain.toml",
+    "tomls/markets/legacy.toml",
 ]
 
 [setting.snx_package]
@@ -64,3 +65,21 @@ defaultValue = "0xE561d5E02207fb5eB32cca20a699E0d8919a1476"
 
 [setting.ccip_token_pool]
 defaultValue = "0x057152DB365B47851B0A0bd431644b8eE21fE1b4"
+
+[setting.legacy_market_package]
+defaultValue = "synthetix-legacy-market:3.3.4"
+
+[invoke.setScPoolConfig]
+target = ["system.CoreProxy"]
+fromCall.func = "getPoolOwner"
+fromCall.args = ["<%= settings.sc_pool_id %>"]
+func = "setPoolConfiguration"
+args = [
+    "<%= settings.sc_pool_id %>",
+    [
+        { marketId = "<%= imports.legacyMarket.settings.marketId %>", weightD18 = 1, maxDebtShareValueD18 = "<%= parseEther('1') %>" },
+    ],
+]
+
+[setting.pdao]
+defaultValue = "0x48914229deDd5A9922f44441ffCCfC2Cb7856Ee9"
